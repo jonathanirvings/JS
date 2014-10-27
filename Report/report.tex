@@ -13,14 +13,7 @@
 \usepackage[pdftex]{graphicx}														% Enable pdflatex
 \usepackage{url}
 \linespread{1.1} % Line spacing
-
-% Margins
-\topmargin=-0.45in
-\evensidemargin=0in
-\oddsidemargin=0in
-\textwidth=6.5in
-\textheight=9.0in
-\headsep=0.25in
+\usepackage[margin = 2.5cm]{geometry}
 
 
 %%% Custom sectioning (sectsty package)
@@ -82,7 +75,9 @@ TSP is NP-Hard.
 We will reduce TSP into a directed Hamiltonian Cycle Problem, which is known to be a NP-Hard problem. Given a directed graph $G$, we construct a weighted complete directed graph $G'$ which has the same vertices as $G$. In addition, we assign a weight of 1 to the edges in $G$ which were originally in $G'$, and a weight of $\infty$ otherwise. Suppose we found a solution to the TSP using graph $G'$ that has finite weight. Then, each of the edges must have weight 1 and hence must be present in the original graph $G$. As such, the solution to the TSP in $G'$ is also a solution to the Hamiltonian Cycle Problem in $G$. On the other hand, if the solution to TSP in $G'$ has infinite weight, then there is no Hamiltonian cycle which only consist of edge weight 1. Hence, there is no Hamiltonian cycle in $G$. As such, the directed Hamiltonian Cycle Problem reduces to TSP, which proves that TSP is NP-Hard.
 \end{proof}
 
-Due to the impossibility of find a polynomial-time algorithm to solve TSP and the relevance of TSP to real life problems, there has been a lot of research that seeks to find an efficient approximation algorithm with a small approximation ratio. Within our course, we have explored several approximation algorithm to solve the TSP, including a 2-approximation algorithm based on constructing a minimum spanning tree (MST), and a 1.5-approximation algorithm that include the application of a minimum weight perfect matching algorithm. However, the effectiveness of these algorithms are only theoretical in nature. While the worst-case bounds for these algorithms are irrefutable, the optimality of these algorithm may differ from our expectations when we apply them to real world data (i.e. a 2-approximation algorithm may perform better on average than a 1.5-approximation algorithm). As such, this project aims to compare the suitability of various approximation algorithm when applied to graphs obtained from real world data or other random means. 
+There has been considerable research done in the past in determining the exact solution for TSP in a graph. A naive algorithm that checks all possible Hamiltonian cycle will incur $O(n!)$ time. It is possible to improve the runtime to $O(n^22^n)$ using dynamic programming (i.e. Held-Karp algorithm), but even such algorithm will take significant time on graphs with small number of vertices\footnote{On a modern computer, it is possible to obtain the optimal solution using Held-Karp algorithm within 1 second for a graph with less than 18 nodes. \cite{steven} Any more vertices will incur a much higher runtime.}. Researchers have explored other approaches such as branch-and-bound algorithms and linear programming. Currently, the record for the highest number of vertices in a graph in which a TSP solution is found is approximately 85,900 nodes\footnote{Found by Applegate et al. using Concorde TSP Solver. \cite{appleman}}. Nevertheless, this is a small quantity compared to many real world instances of TSP.
+
+Due to the impossibility of find a polynomial-time algorithm to solve TSP and the relevance of TSP to real life problems, there has been a lot of research that seeks to find an efficient approximation algorithm with a small approximation ratio. Within our course, we have explored several approximation algorithm to solve the TSP, including a 2-approximation algorithm\footnote{This algorithm only applies for a metric TSP. The same algorithm can be applied to obtain approximate solutions to M-R TSP and G-R TSP as these variants are equivalent.} based on constructing a minimum spanning tree (MST), and a 1.5-approximation algorithm that include the application of a minimum weight perfect matching algorithm. However, the effectiveness of these algorithms are only theoretical in nature. While the worst-case bounds for these algorithms are irrefutable, the optimality of these algorithm may differ from our expectations when we apply them to real world data (i.e. a 2-approximation algorithm may perform better on average than a 1.5-approximation algorithm). As such, this project aims to compare the suitability of various approximation algorithm when applied to graphs obtained from real world data or other random means. 
 
 \section{Problem Formulation}
 
@@ -104,9 +99,13 @@ For this project, we will implement four different approximation algorithms and 
 \begin{enumerate}
 \item \textit{Nearest neighbour heuristics.} We start from a cycle with only one vertex in the cycle. Then, while there are vertices which are not included within our cycle, we choose a vertex which is closest our cycle. Then, we add the vertex to the cycle at a position whereby the increase in the length of the cycle is minimal. Once all the vertices are added to the cycle, we will obtain a $O(log n)$-approximate solution to the TSP (to be proven in the next section).  
 \item \textit{Minimum spanning tree.} We will build a minimum spanning tree for the graph and conduct a DFS traversal on the graph. Within the DFS traversal, we will skip any vertices which has already been visited. This will produce a 2-approximate solution to the TSP (proven in class).
-\item \textit{1.5-approximate algorithm.} After finding the minimum spanning tree of the graph, instead of conducting a DFS, we find add edges to the graph until 
-\item 
+\item \textit{1.5-approximate algorithm.} After finding the minimum spanning tree of the graph, instead of conducting a DFS, we find add edges to the graph until all vertices in the graph have even degree. Then, we can find an Eulerian tour for the graph. The edges to be added will be selecting using a minimum weight perfect matching algorithm such as Edmond's Blossom algorithm.
+\item \textit{2-opt algorithm.} This algorithm makes use of the fact that a cycle without crossing is shorter than a cycle with crossing under the assumption of triangle inequality. We will refine any random cycle until there can be no more improvement to the weights. This algorithm is an $O(\sqrt{n})$-approximate algorithm on average case. \cite{christian}
 \end{enumerate}
+
+We are interested in the optimality of the solution produced by the above four algorithms, as well as the runtime in producing the solutions. In particular, we want to know how well these algorithms will perform on random graphs and real world data. 
+
+In our project, we will first implement methods to generate random graphs and prepare 5 such graphs for experimentation. Then, we will parse real world data from (to be confirmed) and (to be confirmed) and store them in a weighted graph. We will apply each approximation algorithm on our generated graphs and obtain the weight of TSP solution produced by each algorithm. Each algorithm will be executed thrice and the average runtime taken for the algorithms will be calculated. Upon collecting these data, we will compare the results and conclude on the effectiveness of each approximation algorithm.
 
 \section{Algorithms and Theory}
 

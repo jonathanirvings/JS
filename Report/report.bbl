@@ -1,8 +1,26 @@
 \begin{thebibliography}{1}
 
+\bibitem{appleman}
+D.~L. Applegate, R.~M. Bixby, V.~Chavatal, and W.~J. Cook.
+\newblock {\em {The Traveling Salesman Problem}}.
+\newblock Princeton University Press, 2007.
+
 \bibitem{clark}
 J.~Clark and D.~Holton.
 \newblock {\em {A First Look at Graph Theory}}.
 \newblock World Scientific, 2005.
+
+\bibitem{christian}
+C.~Engels and B.~Manthey.
+\newblock {Average-Case Approximation Ratio of the 2-Opt Algorithm for the
+  TSP}.
+\newblock {\em {Operations Research Letters}}, 2009.
+\newblock Retrieved from
+  \url{http://wwwhome.math.utwente.nl/~mantheyb/journals/ORL_EngelsManthey_2Opt.pdf}.
+
+\bibitem{steven}
+S.~Halim and F.~Halim.
+\newblock {\em {Competitve Programming 3}}.
+\newblock lulu, 2013.
 
 \end{thebibliography}
