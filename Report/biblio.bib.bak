@@ -27,3 +27,10 @@ year = {2009},
 note = {Retrieved from \url{http://wwwhome.math.utwente.nl/~mantheyb/journals/ORL_EngelsManthey_2Opt.pdf}},
 };
 
+@Article{kolmogorov,
+author = {V. Kolmogorov},
+title = {{Blossom V: A new implementation of a minimum cost perfect matching algorithm}},
+journal = {{Mathematical Programming Computation}},
+year = {2009},
+note = {Retrieved from \url{http://pub.ist.ac.at/~vnk/papers/blossom5.pdf}},
+};

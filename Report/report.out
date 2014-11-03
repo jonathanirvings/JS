@@ -1,6 +1,10 @@
 \BOOKMARK [1][-]{section.1}{Introduction}{}% 1
 \BOOKMARK [1][-]{section.2}{Problem Formulation}{}% 2
 \BOOKMARK [1][-]{section.3}{Algorithms and Theory}{}% 3
-\BOOKMARK [1][-]{section.4}{Implementations and Experiments}{}% 4
-\BOOKMARK [1][-]{section.5}{Conclusions}{}% 5
-\BOOKMARK [1][-]{section.6}{Bibliography}{}% 6
+\BOOKMARK [2][-]{subsection.3.1}{Nearest Neighbour Heuristic}{section.3}% 4
+\BOOKMARK [2][-]{subsection.3.2}{Minimum Spanning Tree}{section.3}% 5
+\BOOKMARK [2][-]{subsection.3.3}{2-opt Algorithm}{section.3}% 6
+\BOOKMARK [2][-]{subsection.3.4}{1.5 Approximation Algorithm}{section.3}% 7
+\BOOKMARK [1][-]{section.4}{Implementations and Experiments}{}% 8
+\BOOKMARK [1][-]{section.5}{Conclusions}{}% 9
+\BOOKMARK [1][-]{section.6}{Bibliography}{}% 10
