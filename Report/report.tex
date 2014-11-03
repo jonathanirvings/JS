@@ -120,16 +120,28 @@ In this section, we will describe the implementation of the four approximation a
 \caption{Nearest Neighbour Heursitics}\label{neighbour}
 \begin{algorithmic}[1]
 \Procedure{Nearest-Neighbour-Heuristics}{$g$}\Comment{Returns the TSP approximation}
-   \State $r\gets a\bmod b$
-   \While{$r\not=0$}\Comment{We have the answer if r is 0}
-      \State $a\gets b$
-      \State $b\gets r$
-      \State $r\gets a\bmod b$
-   \EndWhile\label{euclidendwhile}
-   \State \textbf{return} $b$\Comment{The gcd is b}
+   \State Set $visited[v]\gets$ false, for all $v\in V$
+   \State $TSP\gets\emptyset$
+   \State $u\gets 0$
+   \State $visited[u]\gets$ true
+   \While{there is unvisited vertex}
+      \State $v\gets$ unvisited vertex that is closest to $u$
+      \State $TSP\gets TSP\cup(u,v)$
+      \State $visited[v]\gets$ true
+      \State $u\gets v$
+   \EndWhile\label{nearestneighbourwhile}
+   \State \textbf{return} $TSP$
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
+
+\begin{theorem}
+Algorithm 1 is $O(log n)$ approximation
+\end{theorem}
+
+\begin{proof}
+Shi-Jie is handsome <3
+\end{proof}
 
 \subsection{Minimum Spanning Tree}
 \subsection{2-opt Algorithm}
