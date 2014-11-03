@@ -43,6 +43,7 @@
 \numberwithin{table}{section}				% Tablenumbering: section.tab#
 
 \newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
 
 %%% Maketitle metadata
 \newcommand{\horrule}[1]{\rule{\linewidth}{#1}} 	% Horizontal rule
@@ -136,11 +137,33 @@ In this section, we will describe the implementation of the four approximation a
 \end{algorithm}
 
 \begin{theorem}
-Algorithm 1 is $O(log n)$ approximation
+Algorithm 1 is $O(\log n)$ approximation
 \end{theorem}
 
 \begin{proof}
-Shi-Jie is handsome <3
+Suppose for every vertex $u\in V$, let $l_{u}$ be the length of the edge leaving vertex $u$ to vertex $v$, which is the nearest unvisited vertex from $u$.
+\begin{lemma}
+For any pair of vertices $(u,v)$, $d(u,v)\geq \min(l_{u},l_{v})$
+\end{lemma}
+\begin{proof}
+\item
+Case 1: If vertex $u$ was visited by the algorithm before vertex $v$, then $v$ was a candidate for the closest unvisited vertex from $u$. Therefore, edge $(u,v)$ is no shorter than the edge leaving vertex $u$. Therefore, $d(u,v)\geq l_{u}$
+\item
+Case 2: If vertex $u$ was visited by the algorithm after vertex $v$, then $u$ was a candidate for the closest unvisited vertex from $v$. Therefore, edge $(u,v)$ is no shorter than the edge leaving vertex $v$. Therefore, $d(u,v)\geq l_{v}$
+\item Either case 1 or case 2 must be true. Therefore, $d(u,v)\geq \min(l_{u},l_{v})$
+\end{proof}
+\begin{lemma}
+For any vertex $u$, $2l_{u}\leq OPT$
+\end{lemma}
+\begin{proof}
+Consider breaking the optimal tour into two disjoint paths P and Q, where P starts from $u$ and ends at $v$, and Q starts from $v$ and ends at $u$. Therefore, 
+\[OPT = cost(P) + cost(Q)\]
+Because of triangular equality, $d(u,v)\leq cost(P)$ and $d(u,v)\leq cost(Q)$. Therefore, 
+\[2d(u,v)\leq OPT\]
+Therefore, 
+\[2l_{u}\leq OPT\]
+
+\end{proof}
 \end{proof}
 
 \subsection{Minimum Spanning Tree}
