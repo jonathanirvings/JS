@@ -44,6 +44,7 @@
 
 \newtheorem{theorem}{Theorem}
 \newtheorem{lemma}{Lemma}
+\newtheorem{definition}{Definition}
 
 %%% Maketitle metadata
 \newcommand{\horrule}[1]{\rule{\linewidth}{#1}} 	% Horizontal rule
@@ -120,10 +121,11 @@ In this section, we will describe the implementation of the four approximation a
 \begin{algorithm}
 \caption{Nearest Neighbour Heursitics}\label{neighbour}
 \begin{algorithmic}[1]
-\Procedure{Nearest-Neighbour-Heuristics}{$g$}\Comment{Returns the TSP approximation}
+\Procedure{Nearest-Neighbour-Heuristics}{$G = (V,E)$}\Comment{Returns the TSP approximation}
    \State Set $visited[v]\gets$ false, for all $v\in V$
    \State $TSP\gets\emptyset$
-   \State $u\gets 0$
+   \State $u_{0}\gets 1$ \Comment{Choose vertex 1 as the starting point}
+   \State $u\gets u_{0}$
    \State $visited[u]\gets$ true
    \While{there is unvisited vertex}
       \State $v\gets$ unvisited vertex that is closest to $u$
@@ -131,28 +133,38 @@ In this section, we will describe the implementation of the four approximation a
       \State $visited[v]\gets$ true
       \State $u\gets v$
    \EndWhile\label{nearestneighbourwhile}
-   \State \textbf{return} $TSP$
+   \State \textbf{return} $TSP\cup(u,u_{0})$
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
 
+\begin{definition}
+For any tour $P$, $cost(P)$ is the total weight of edges included in tour $P$.
+\end{definition}
+\begin{definition}
+$NNH$ is a tour achieved by the algorithm given above.
+\end{definition}
 \begin{theorem}
 Algorithm 1 is $O(\log n)$ approximation
 \end{theorem}
 
 \begin{proof}
 Suppose for every vertex $u\in V$, let $l_{u}$ be the length of the edge leaving vertex $u$ to vertex $v$, which is the nearest unvisited vertex from $u$.
+\item
+Let $x$ is a permutation of \{$i\mid 1\leq i \leq n$\} such that $l_{x_i} \geq l_{x_{i+1}}$ for any $i$ satisfying $1\leq i\le n$
 \begin{lemma}
 For any pair of vertices $(u,v)$, $d(u,v)\geq \min(l_{u},l_{v})$
 \end{lemma}
 \begin{proof}
 \item
-Case 1: If vertex $u$ was visited by the algorithm before vertex $v$, then $v$ was a candidate for the closest unvisited vertex from $u$. Therefore, edge $(u,v)$ is no shorter than the edge leaving vertex $u$. Therefore, $d(u,v)\geq l_{u}$
+Case 1: If vertex $u$ was visited in $NNH$ before vertex $v$, then $v$ was a candidate for the closest unvisited vertex from $u$. Therefore, edge $(u,v)$ is no shorter than the edge leaving vertex $u$. Therefore, $d(u,v)\geq l_{u}$
 \item
-Case 2: If vertex $u$ was visited by the algorithm after vertex $v$, then $u$ was a candidate for the closest unvisited vertex from $v$. Therefore, edge $(u,v)$ is no shorter than the edge leaving vertex $v$. Therefore, $d(u,v)\geq l_{v}$
+Case 2: If vertex $u$ was visited in $NNH$ after vertex $v$, then $u$ was a candidate for the closest unvisited vertex from $v$. Therefore, edge $(u,v)$ is no shorter than the edge leaving vertex $v$. Therefore, $d(u,v)\geq l_{v}$
 \item Either case 1 or case 2 must be true. Therefore, $d(u,v)\geq \min(l_{u},l_{v})$
 \end{proof}
 \begin{lemma}
+\label{law of small l}
+\emph{(law of small l)}
 For any vertex $u$, $2l_{u}\leq OPT$
 \end{lemma}
 \begin{proof}
@@ -162,8 +174,41 @@ Because of triangular equality, $d(u,v)\leq cost(P)$ and $d(u,v)\leq cost(Q)$. T
 \[2d(u,v)\leq OPT\]
 Therefore, 
 \[2l_{u}\leq OPT\]
-
 \end{proof}
+\begin{lemma}
+\label{mwahaha}
+\emph{mwahaha}
+For any $k$ satisfying $1\leq k\leq n$, $OPT\geq 2\sum\limits_{i=k+1}^{min(2k,n)}l_{x_i}$
+\end{lemma}
+\begin{proof}
+Let $H$ is a subgraph defined on the set of vertices \{$x_i\mid 1\leq i \leq \min(2k,n)$\}. Let $T$ be the tour in $H$ which visits the vertices in the same order as these vertices are visited in the optimal tour. By triangle inequality, every edge $(u,v)$ in $T$ have a length of less than or equal to the length of the path from $u$ to $v$ in the original graph. Therefore, 
+\[OPT\geq COST(T)\]
+\[OPT\geq \sum\limits_{i=1}^{min(2k,n)}l_{x_i}\]
+\[OPT\geq \sum\limits_{i=1}^{k}l_{x_i} + \sum\limits_{i=k+1}^{min(2k,n)}l_{x_i}\]
+\[OPT\geq \sum\limits_{i=1}^{min(k,n-k)}l_{x_{i}} + \sum\limits_{i=k+1}^{min(2k,n)}l_{x_i}\]
+\[OPT\geq \sum\limits_{i=k+1}^{min(2k,n)}l_{x_{i-k}} + \sum\limits_{i=k+1}^{min(2k,n)}l_{x_i}\]
+Since $l_{x_{i-k}}\geq l_{x_{i}}$,
+\[OPT\geq \sum\limits_{i=k+1}^{min(2k,n)}l_{x_{i}} + \sum\limits_{i=k+1}^{min(2k,n)}l_{x_i}\]
+\[OPT\geq 2\sum\limits_{i=k+1}^{min(2k,n)}l_{x_i}\]
+\end{proof}
+\begin{lemma}
+$(\lceil\log n\rceil+1)OPT\geq 2\sum\limits_{i=1}^{n}l_{x_i}$
+\end{lemma}
+\begin{proof}
+By Lemma~\ref{mwahaha}
+\[OPT\geq 2\sum\limits_{i=k+1}^{min(2k,n)}l_{x_i}\]
+\[\sum\limits_{k=0}^{\lceil{\log n}\rceil-1}{OPT}\geq \sum\limits_{k=0}^{\lceil{\log n}\rceil-1}2\sum\limits_{i=2^{k}+1}^{min(2^{k+1},n)}l_{x_i}\]
+\[\sum\limits_{k=0}^{\lceil{\log n}\rceil-1}{OPT}\geq 2\sum\limits_{k=0}^{\lceil{\log n}\rceil-1}\sum\limits_{i=2^{k}+1}^{min(2^{k+1},n)}l_{x_i}\]
+\[(\lceil\log n\rceil)OPT\geq 2\sum\limits_{i=2}^{n}l_{x_i}\]
+By Lemma~\ref{law of small l}
+\[OPT\geq 2l_{x_{1}}\]
+Therefore,
+\[(\lceil\log n\rceil+1)OPT\geq 2\sum\limits_{i=1}^{n}l_{x_i}\]
+\end{proof}
+Therefore,
+\[\frac{1}{2}(\lceil\log n\rceil+1)OPT\geq\sum\limits_{i=1}^{n}l_{x_i}\]
+\[\frac{1}{2}(\lceil\log n\rceil+1)OPT\geq COST(NNH)\]
+Therefore, $NNH$ is $O(\log n)$-approximation algorithm
 \end{proof}
 
 \subsection{Minimum Spanning Tree}
