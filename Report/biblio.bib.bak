@@ -24,7 +24,7 @@ author = {C. Engels and B. Manthey},
 title = {{Average-Case Approximation Ratio of the 2-Opt Algorithm for the TSP}},
 journal = {{Operations Research Letters}},
 year = {2009},
-note = {Retrieved from \url{http://wwwhome.math.utwente.nl/~mantheyb/journals/ORL_EngelsManthey_2Opt.pdf}},
+note = {Retrieved from \url{http://wwwhome.math.utwente.nl/~mantheyb/journals/ORL_EngelsManthey_2Opt.pdf}}
 };
 
 @Article{kolmogorov,
@@ -32,5 +32,33 @@ author = {V. Kolmogorov},
 title = {{Blossom V: A new implementation of a minimum cost perfect matching algorithm}},
 journal = {{Mathematical Programming Computation}},
 year = {2009},
-note = {Retrieved from \url{http://pub.ist.ac.at/~vnk/papers/blossom5.pdf}},
+note = {Retrieved from \url{http://pub.ist.ac.at/~vnk/papers/blossom5.pdf}}
 };
+
+@misc{sedgewick,
+  Author = {Robert Sedgewick and Kevin Wayne},
+  Institution = {Princeton University},
+  Year = {Spring 2007},
+  Title = {Minimum Spanning Tree lecture notes},
+  note = {Retrieved from \url{http://www.cs.princeton.edu/courses/archive/spr07/cos226/lectures/19MST.pdf}}
+};
+
+@article{boese,
+ author = {Boese, Kenneth D. and Kahng, Andrew B. and Muddu, Sudhakar},
+ title = {A New Adaptive Multi-start Technique for Combinatorial Global Optimizations},
+ journal = {Oper. Res. Lett.},
+ issue_date = {September, 1994},
+ volume = {16},
+ number = {2},
+ month = sep,
+ year = {1994},
+ issn = {0167-6377},
+ pages = {101--113},
+ numpages = {13},
+ url = {http://dx.doi.org/10.1016/0167-6377(94)90065-5},
+ doi = {10.1016/0167-6377(94)90065-5},
+ acmid = {2308172},
+ publisher = {Elsevier Science Publishers B. V.},
+ address = {Amsterdam, The Netherlands, The Netherlands},
+ keywords = {Global optimization, Graph bisection, Heuristic search, Multi-start, Stochastic hill-climbing, Traveling salesman problem},
+} 

@@ -5,6 +5,12 @@ D.~L. Applegate, R.~M. Bixby, V.~Chavatal, and W.~J. Cook.
 \newblock {\em {The Traveling Salesman Problem}}.
 \newblock Princeton University Press, 2007.
 
+\bibitem{boese}
+Kenneth~D. Boese, Andrew~B. Kahng, and Sudhakar Muddu.
+\newblock A new adaptive multi-start technique for combinatorial global
+  optimizations.
+\newblock {\em Oper. Res. Lett.}, 16(2):101--113, September 1994.
+
 \bibitem{clark}
 J.~Clark and D.~Holton.
 \newblock {\em {A First Look at Graph Theory}}.
@@ -29,5 +35,11 @@ V.~Kolmogorov.
   algorithm}.
 \newblock {\em {Mathematical Programming Computation}}, 2009.
 \newblock Retrieved from \url{http://pub.ist.ac.at/~vnk/papers/blossom5.pdf}.
+
+\bibitem{sedgewick}
+Robert Sedgewick and Kevin Wayne.
+\newblock Minimum spanning tree lecture notes, Spring 2007.
+\newblock Retrieved from
+  \url{http://www.cs.princeton.edu/courses/archive/spr07/cos226/lectures/19MST.pdf}.
 
 \end{thebibliography}
