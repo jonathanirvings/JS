@@ -244,13 +244,13 @@ The solution to the 2-opt algorithm can be further improved using local search a
 \begin{algorithmic}[1]
 \Procedure{2-Opt-Algorithm-with-Local-Search}{$G = (V,E)$}
    \State $TSP \gets $ Random Tour in $G$
-   \While{Time Elapsed is less than 10s}
+   \While{Time elapsed is less than 10s}
    	\State $currentTour \gets$ \textsc{Mutate-TSP}($TSP$)
 	\State  $i \gets 1$
 	\State  $j \gets i+2$
       \While{$i \le n-2$}		
       	\While{$ j \le n$}
-         \State $newTSP \gets x_1x_2 \cdots x_ix_jx_{j-1} \cdots x_{i+1}x_{j+1}x_{j+2} \cdots x_n$ \Comment{Tour is modified from $newTSP$}
+         \State $newTSP \gets x_1x_2 \cdots x_ix_jx_{j-1} \cdots x_{i+1}x_{j+1}x_{j+2} \cdots x_n$ \Comment{Modified from $currentTour$}
          \State $change \gets  d(x_i, x_{i+1})+d(x_j, x_{j+1}) - d(x_i, x_j) + d(x_{i+1}, x_{j+1})$
          \If{$change > 0$}
          	\State $TSP \gets newTSP$
@@ -274,11 +274,18 @@ The solution to the 2-opt algorithm can be further improved using local search a
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
-
+\newpage
 \subsection{1.5 Approximation Algorithm}
 The construction of a 1.5-approximate tour using minimum spanning tree and minimum weight perfect matching is exactly the same as the one introduced in lecture. As such, we will not restate the algorithm in this report. We will use the $Blossom V$ algorithm \cite{kolmogorov} which finds the minimum weight perfect matching for a graph within $O(mn \log(n))$ time, which is equivalent to $O(n^2 \log(n))$ for a tree.
 
 \section{Implementations and Experiments}
+
+We will compare the performance of the four approximation algorithms mentioned in the previous section on five random graphs of different sizes, and two graphs obtained from (insert source here). As most approximation algorithms mentioned above run in $O(n^2)$ time, we will reduce the size of the graphs obtained from real world. Upon running the algorithms, we will obtain the approximated TSP solution and runtime for each algorithm, and tabulate the results for comparison.
+
+Our program was implemented in C++ and can be found attached with this submission. We will use (insert machine name) which runs on (insert processor and memory information) to conduct the experiments. The following table summarises the result form our experiments.
+
+
+
 
 \section{Conclusions}
 

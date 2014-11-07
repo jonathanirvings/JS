@@ -181,23 +181,20 @@ Let $H$ be the subgraph defined on the set of vertices $\{x_i\mid 1\leq i \leq \
 OPT&\geq COST(T)\quad\text{ since $T$ is a part of $OPT$}\\
 &\geq \sum\limits_{i=1}^{\min(2k,n)}\min(l_{x_i}, l_{x_{i+1}}) \quad\text{from Lemma 1. We assume that $x_{\min(2k, n)+1} = x_1$.}
 \end{align*}
-Note that each $l_{x_i}$ can appear at most twice in the summation above, since a vertex can only be the endpoint of at most 2 edges. Since $l_{x_i} \ge l_{x_{i+1}}$, we can attain the lower bound of the inequality by choosing the nodes with the smallest value for $
-\[OPT\geq \sum\limits_{i=k+1}^{\min(2k,n)}l_{x_{i}} + \sum\limits_{i=k+1}^{\min(2k,n)}l_{x_i}\geq 2\sum\limits_{i=k+1}^{\min(2k,n)}l_{x_i}\]
+Note that each $l_{x_i}$ can appear at most twice in the summation above, since a vertex can only be the endpoint of at most 2 edges. We can attain the lower bound of the inequality by choosing the nodes with the smallest value for $l_{x_i}$. Using the fact that $l_{x_i} \ge l_{x_{i+1}}$ and since each node can only be chosen twice, we have
+\[OPT\geq \sum\limits_{i=1}^{\min(2k,n)}\min(l_{x_i}, l_{x_{i+1}})\geq 2\sum\limits_{i=k+1}^{\min(2k,n)}l_{x_i}\]
 \end{proof}
-\begin{lemma}
-$(\lceil\log n\rceil+1)OPT\geq 2\sum\limits_{i=1}^{n}l_{x_i}$
-\end{lemma}
-\begin{proof}
-By Lemma~\ref{mwahaha}
-\[OPT\geq 2\sum\limits_{i=k+1}^{min(2k,n)}l_{x_i}\]
-\[\sum\limits_{k=0}^{\lceil{\log n}\rceil-1}{OPT}\geq \sum\limits_{k=0}^{\lceil{\log n}\rceil-1}2\sum\limits_{i=2^{k}+1}^{min(2^{k+1},n)}l_{x_i}\]
-\[\sum\limits_{k=0}^{\lceil{\log n}\rceil-1}{OPT}\geq 2\sum\limits_{k=0}^{\lceil{\log n}\rceil-1}\sum\limits_{i=2^{k}+1}^{min(2^{k+1},n)}l_{x_i}\]
-\[(\lceil\log n\rceil)OPT\geq 2\sum\limits_{i=2}^{n}l_{x_i}\]
-By Lemma~\ref{law of small l}
+By Lemma 3
+\begin{align*}
+OPT &\geq 2\sum\limits_{i=k+1}^{\min(2k,n)}l_{x_i}\\
+\sum\limits_{k=0}^{\lceil{\log n}\rceil-1}{OPT}&\geq \sum\limits_{k=0}^{\lceil{\log n}\rceil-1}\left(2\sum\limits_{i=2^{k}+1}^{\min(2^{k+1},n)}l_{x_i}\right)\\
+&\geq 2\sum\limits_{k=0}^{\lceil{\log n}\rceil-1}\left(\sum\limits_{i=2^{k}+1}^{\min(2^{k+1},n)}l_{x_i}\right)\\
+(\lceil\log n\rceil)OPT &\geq 2\sum\limits_{i=2}^{n}l_{x_i}
+\end{align*}
+By Lemma 2
 \[OPT\geq 2l_{x_{1}}\]
 Therefore,
 \[(\lceil\log n\rceil+1)OPT\geq 2\sum\limits_{i=1}^{n}l_{x_i}\]
-\end{proof}
 Therefore,
 \[\frac{1}{2}(\lceil\log n\rceil+1)OPT\geq\sum\limits_{i=1}^{n}l_{x_i}\]
 \[\frac{1}{2}(\lceil\log n\rceil+1)OPT\geq COST(NNH)\]
@@ -240,20 +237,20 @@ The 2-opt algorithm is described in the following pseudocode:
 
 To improve the runtime of the algorithm, we can start with a $TSP$ derived from the nearest neighbour heuristics. Note that each improvement on the TSP incurs a runtime of $O(n^2)$. Since the nearest neighbour heuristic is already an $O(\log n)$-approximation algorithm, we expect that there will not be a large number of improvements conducted on the initial tour.
 
-The solution to the 2-opt algorithm can be further improved using local search algorithms. The global optimum to the TSP is known to exhibit a "big valley" structure, in which the global optimum is located in the middle of a cluster of local optima.\cite{boese} With this property, a local search algorithm allows us to escape from the local optimum in a gradient that leads to the global optimum. For this project, we will not conduct a gradient search to identify the best modification to a local optimum to move towards a global optimum. Instead, we will mutate a local optimum by conducting a 2-opt modification twice on random pairs of edges. Upon experimenting on small graphs (in particular, graphs with 20 vertices in which an exact solution can be found using dynamic programming), we have found that our local search approach converges to the global optimum within 0.3s\footnote{The same algorithm is used to solve a challenge posted in CS2010R in which students are required to submit a code that returns the exact solution to the TSP for 30 vertices. The solution got accepted within 7 seconds of running time for 20 test cases.}. The pseudocode for the improved algorithm is presented below:
+The solution to the 2-opt algorithm can be further improved using local search algorithms. The global optimum to the TSP is known to exhibit a "big valley" structure, in which the global optimum is located in the middle of a cluster of local optima.\cite{boese} With this property, a local search algorithm allows us to escape from the local optimum in a gradient that leads to the global optimum. For this project, we will not conduct a gradient search to identify the best modification to a local optimum to move towards a global optimum. Instead, we will mutate a local optimum by conducting a 2-opt modification twice on random pairs of edges. Upon experimenting on small graphs (in particular, graphs with 20 vertices in which an exact solution can be found using dynamic programming), we have found that our local search approach converges to the global optimum within 0.3s\footnote{The same algorithm is used to solve a challenge posted in CS2010R in which students are required to submit a code that returns the exact solution to the TSP for 30 vertices. The solution got accepted within 7 seconds of running time for 20 test cases.}. The pseudocode for the improved algorithm is presented in the next page.
 
 \begin{algorithm}
 \caption{2-opt Algorithm with Local Search}\label{2-opt-local}
 \begin{algorithmic}[1]
 \Procedure{2-Opt-Algorithm-with-Local-Search}{$G = (V,E)$}
    \State $TSP \gets $ Random Tour in $G$
-   \While{Time Elapsed is less than 10s}
+   \While{Time elapsed is less than 10s}
    	\State $currentTour \gets$ \textsc{Mutate-TSP}($TSP$)
 	\State  $i \gets 1$
 	\State  $j \gets i+2$
       \While{$i \le n-2$}		
       	\While{$ j \le n$}
-         \State $newTSP \gets x_1x_2 \cdots x_ix_jx_{j-1} \cdots x_{i+1}x_{j+1}x_{j+2} \cdots x_n$ \Comment{Tour is modified from $newTSP$}
+         \State $newTSP \gets x_1x_2 \cdots x_ix_jx_{j-1} \cdots x_{i+1}x_{j+1}x_{j+2} \cdots x_n$ \Comment{Modified from $currentTour$}
          \State $change \gets  d(x_i, x_{i+1})+d(x_j, x_{j+1}) - d(x_i, x_j) + d(x_{i+1}, x_{j+1})$
          \If{$change > 0$}
          	\State $TSP \gets newTSP$
@@ -282,6 +279,10 @@ The solution to the 2-opt algorithm can be further improved using local search a
 The construction of a 1.5-approximate tour using minimum spanning tree and minimum weight perfect matching is exactly the same as the one introduced in lecture. As such, we will not restate the algorithm in this report. We will use the $Blossom V$ algorithm \cite{kolmogorov} which finds the minimum weight perfect matching for a graph within $O(mn \log(n))$ time, which is equivalent to $O(n^2 \log(n))$ for a tree.
 
 \section{Implementations and Experiments}
+
+We will compare the performance of the four approximation algorithms mentioned in the previous section on five random graphs of different sizes, and two graphs obtained from (insert source here). As most approximation algorithms mentioned above run in $O(n^2)$ time, we will reduce the size of the graphs obtained from real world. Upon running the algorithms, we will obtain the approximated TSP solution and runtime for each algorithm, and tabulate the results for comparison.
+
+Our programs are implemented in C++ and is attached along this submission. We will use (insert machine name) which runs on (insert processor and memory information) to conduct the experiments.
 
 \section{Conclusions}
 
