@@ -18,6 +18,7 @@ double dist(point node1, point node2);
 double greatCircleDistance(point node1, point node2);
 double computeTourDistance(vi tour, vector<point> nodeList);
 vi mutateTour(vi tour);
+void print_vector(vi v);
 
 //-----------------------------------------
 //	Main Methods
@@ -41,11 +42,10 @@ graph randomGraph(int n, double D, double p)
 		for (int j = i + 1; j < n; ++j)
 		{
 			double d = dist(nodePosition[i],nodePosition[j]);
-			if ((double)rand() / RAND_MAX < p)
-			{
-				randomResult[i].push_back(make_pair(j,d));
-				randomResult[j].push_back(make_pair(i,d));
-			}
+			//printf("%d %d %lf %lf %lf %lf %lf\n", i, j, nodePosition[i].first, nodePosition[i].second, nodePosition[j].first, nodePosition[j].second, d);
+			randomResult[i].push_back(make_pair(j,d));
+			randomResult[j].push_back(make_pair(i,d));
+			
 		}
 	}
 	return randomResult;
@@ -65,7 +65,7 @@ vector<point> randomGraphNodeList(int n, double D, double p)
 	return nodePosition;
 }
 
-double twoOptAlgorithm(vector<point> nodeList, int runTime){
+vi twoOptAlgorithm(vector<point> nodeList, int runTime){
 	int startTime = time(NULL);
 	int V = (int)nodeList.size();
 	
@@ -77,6 +77,7 @@ double twoOptAlgorithm(vector<point> nodeList, int runTime){
 
 	double bestDistance = computeTourDistance(tour, nodeList);
 	while(time(NULL) - startTime < runTime){
+		//printf("here\n");
 		vi currentTour = mutateTour(tour);
 		for(int i = 0; i < V; i++){
   			for(int j = i+1; j < V; j++){
@@ -90,23 +91,55 @@ double twoOptAlgorithm(vector<point> nodeList, int runTime){
   				for(int k = j+1; k < V; k++){
   					new_tour.push_back(currentTour[k]);
   				}
+
   				double newDist = computeTourDistance(new_tour, nodeList);
+			//	printf("%d\n", newDist);
+  			//	printf("%lf\n", newDist);
   				if(newDist < bestDistance){
   					tour = new_tour;
   					bestDistance = newDist;
-           // System.out.println("New distance: " + newDist + " "+Arrays.toString(new_tour));
+           			print_vector(tour);
   				}
   			}
   		}
 	}
-	return bestDistance;
+	return tour;
+}
+
+vi nearestNeighbourHeuristic(graph adjList){
+	int V = (int)adjList.size();
+	vi tour;
+	vi selected;
+	selected.assign(V, 0);
+	tour.push_back(0);
+	selected[0] = 1;
+	for(int i = 1; i < V; i++){
+		int prev = tour[i-1];
+		//printf("%d\n", prev);
+		double best = 999999999;
+		int bestIndex = 0;
+		//print_vector(selected);
+		for(int j = 0; j < adjList[prev].size(); j++){
+			int node = adjList[prev][j].first;
+			double currentWeight = adjList[prev][j].second;
+			//printf("%d %lf\n", node, currentWeight);
+			if(selected[node] == 0 && currentWeight < best){
+				best = currentWeight;
+				bestIndex = node;
+			}
+		}
+		selected[bestIndex] = 1;
+		tour.push_back(bestIndex);
+	}
+	return tour;
 }
 
 int main()
 {
 	srand (time(NULL)); // Randomize seed
 	//randomGraph(10,2,1);
-	printf("%lf\n", twoOptAlgorithm(randomGraphNodeList(10, 2, 1), 1));
+	print_vector(twoOptAlgorithm(randomGraphNodeList(10, 100, 1),1));
+	print_vector(nearestNeighbourHeuristic(randomGraph(10, 2, 1)));
 }
 
 //-----------------------------------------
@@ -115,7 +148,7 @@ int main()
 
 double dist(point node1, point node2)
 {
-	return sqrt((node1.first - node2.first) * (node1.second - node2.second));
+	return sqrt((node1.first - node2.first)*(node1.first - node2.first) + (node1.second - node2.second)*(node1.second - node2.second));
 }
 
 double greatCircleDistance(point node1, point node2){
@@ -123,7 +156,7 @@ double greatCircleDistance(point node1, point node2){
 	double pLong = node1.second;
 	double qLat = node2.first;
 	double qLong = node2.second;
-	int radius = EARTH_RAD;
+	double radius = EARTH_RAD;
 	pLat *= PI / 180; pLong *= PI / 180;
   	qLat *= PI / 180; qLong *= PI / 180;
   	return radius * acos(cos(pLat)*cos(pLong)*cos(qLat)*cos(qLong) +
@@ -160,4 +193,13 @@ vi mutateTour(vi tour){
 		finalTour = newTour;
 	}
 	return finalTour;
+}
+
+void print_vector(vi v){
+  printf("[");
+  for(int i = 0; i < (int)v.size(); i++){
+    printf("%d ", v[i]);
+  }
+  printf("]");
+  printf("\n");
 }
