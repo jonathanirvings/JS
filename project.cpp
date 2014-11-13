@@ -195,18 +195,18 @@ vi twoApproxAlgorithm(graph adjList){
 	return tour;
 }
 
-void outputGraphToFile(String fileName, vector<point> nodeList) 
+void outputGraphToFile(string fileName, vector<point> nodeList) 
 {
-	freopen(fileName, "w", stdout);	
+	freopen(fileName.c_str(), "w", stdout);	
 	for (int i = 0; i < nodeList.size(); ++i)
 	{
 		printf("%.6lf %.6lf\n",nodeList[i].first,nodeList[i].second);
 	}
 }
 
-vector<point> inputGraphFromFile(String fileName) 
+vector<point> inputGraphFromFile(string fileName) 
 {
-	freopen(fileName, "r", stdin);	
+	freopen(fileName.c_str(), "r", stdin);	
 	vector<point> graphResult;
 	double x,y;
 	while (scanf("%lf %lf",&x,&y)) {
@@ -215,14 +215,25 @@ vector<point> inputGraphFromFile(String fileName)
 	return graphResult;
 }
 
+void generateRandomGraphs(void)
+{
+	outputGraphToFile("data_random/random1.txt",randomGraphNodeList(100,100,1));
+	outputGraphToFile("data_random/random2.txt",randomGraphNodeList(1000,100,1));
+	outputGraphToFile("data_random/random3.txt",randomGraphNodeList(5000,100,1));
+	outputGraphToFile("data_random/random4.txt",randomGraphNodeList(10000,1,1));
+	outputGraphToFile("data_random/random5.txt",randomGraphNodeList(10000,1000,1));
+}
+
 int main()
 {
 	//freopen("output.txt", "w", stdout);
 	srand (time(NULL)); // Randomize seed
 	//randomGraph(10,2,1);
-	print_vector(twoOptAlgorithm(randomGraphNodeList(10, 100, 1),1));
-	print_vector(nearestNeighbourHeuristic(randomGraph(10, 2, 1)));
-	print_vector(twoApproxAlgorithm(randomGraph(10, 2, 1)));
+	//print_vector(twoOptAlgorithm(randomGraphNodeList(10, 100, 1),1));
+	//print_vector(nearestNeighbourHeuristic(randomGraph(10, 2, 1)));
+	//print_vector(twoApproxAlgorithm(randomGraph(10, 2, 1)));
+	generateRandomGraphs();
+	
 }
 
 //-----------------------------------------
