@@ -195,9 +195,29 @@ vi twoApproxAlgorithm(graph adjList){
 	return tour;
 }
 
+void outputGraphToFile(String fileName, vector<point> nodeList) 
+{
+	freopen(fileName, "w", stdout);	
+	for (int i = 0; i < nodeList.size(); ++i)
+	{
+		printf("%.6lf %.6lf\n",nodeList[i].first,nodeList[i].second);
+	}
+}
+
+vector<point> inputGraphFromFile(String fileName) 
+{
+	freopen(fileName, "r", stdin);	
+	vector<point> graphResult;
+	double x,y;
+	while (scanf("%lf %lf",&x,&y)) {
+		graphResult.push_back(make_pair(x,y));
+	}
+	return graphResult;
+}
+
 int main()
 {
-	freopen("output.txt", "w", stdout);
+	//freopen("output.txt", "w", stdout);
 	srand (time(NULL)); // Randomize seed
 	//randomGraph(10,2,1);
 	print_vector(twoOptAlgorithm(randomGraphNodeList(10, 100, 1),1));
