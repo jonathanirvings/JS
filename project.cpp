@@ -48,7 +48,7 @@ graph randomGraph(int n, double D, double p)
 	{
 		for (int j = i + 1; j < n; ++j)
 		{
-			double d = dist(nodePosition[i],nodePosition[j]);
+			double d = greatCircleDistance(nodePosition[i],nodePosition[j]);
 			//printf("%d %d %lf %lf %lf %lf %lf\n", i, j, nodePosition[i].first, nodePosition[i].second, nodePosition[j].first, nodePosition[j].second, d);
 			randomResult[i].push_back(make_pair(j,d));
 			randomResult[j].push_back(make_pair(i,d));
@@ -70,6 +70,20 @@ vector<point> randomGraphNodeList(int n, double D, double p)
 	}
 
 	return nodePosition;
+}
+
+graph nodeListToAdjList(vector<point> nodeList)
+{
+	graph adjList;
+	adjList.resize(nodeList.size());
+	for (int i = 0; i < nodeList.size(); ++i)
+	{
+		for (int j = i + 1; j < nodeList.size(); ++j)
+		{
+			adjList[i].push_back(make_pair(j,greatCircleDistance(nodeList[i],nodeList[j])));
+		}
+	}
+	return adjList;
 }
 
 vi twoOptAlgorithm(vector<point> nodeList, int runTime){
@@ -209,7 +223,7 @@ vector<point> inputGraphFromFile(string fileName)
 	freopen(fileName.c_str(), "r", stdin);	
 	vector<point> graphResult;
 	double x,y;
-	while (scanf("%lf %lf",&x,&y)) {
+	while (scanf("%lf %lf",&x,&y)!=EOF) {
 		graphResult.push_back(make_pair(x,y));
 	}
 	return graphResult;
@@ -217,23 +231,69 @@ vector<point> inputGraphFromFile(string fileName)
 
 void generateRandomGraphs(void)
 {
-	outputGraphToFile("data_random/random1.txt",randomGraphNodeList(100,100,1));
-	outputGraphToFile("data_random/random2.txt",randomGraphNodeList(1000,100,1));
-	outputGraphToFile("data_random/random3.txt",randomGraphNodeList(5000,100,1));
-	outputGraphToFile("data_random/random4.txt",randomGraphNodeList(10000,1,1));
-	outputGraphToFile("data_random/random5.txt",randomGraphNodeList(10000,1000,1));
+	outputGraphToFile("data_random/random1.txt",randomGraphNodeList(10,100,1));
+	outputGraphToFile("data_random/random2.txt",randomGraphNodeList(20,100,1));
+	outputGraphToFile("data_random/random3.txt",randomGraphNodeList(500,100,1));
+	outputGraphToFile("data_random/random4.txt",randomGraphNodeList(1000,1,1));
+	outputGraphToFile("data_random/random5.txt",randomGraphNodeList(1000,1000,1));
 }
+
+
+
+string files[] = {"data_random/random1.txt",
+				  "data_random/random2.txt",
+				  "data_random/random3.txt",
+				  "data_random/random4.txt",
+				  "data_random/random5.txt",
+				  "data_reduced/911.txt",
+				  "data_reduced/nypd.txt"};
+
+string testname[] = {"Random Graph 1",
+					 "Random Graph 2",
+					 "Random Graph 3",
+					 "Random Graph 4",
+					 "Random Graph 5",
+					 "Real Graph 1",
+					 "Real Graph 2" };
 
 int main()
 {
 	//freopen("output.txt", "w", stdout);
 	srand (time(NULL)); // Randomize seed
-	//randomGraph(10,2,1);
-	//print_vector(twoOptAlgorithm(randomGraphNodeList(10, 100, 1),1));
-	//print_vector(nearestNeighbourHeuristic(randomGraph(10, 2, 1)));
-	//print_vector(twoApproxAlgorithm(randomGraph(10, 2, 1)));
-	generateRandomGraphs();
-	
+	for (int i = 0; i < 7; ++i)
+	{
+		printf("ON DATASET %d: %s\n",i,testname[i].c_str());
+		fflush(stdout);
+		vector<point> nodeList = inputGraphFromFile(files[i]);
+		graph adjList = nodeListToAdjList(nodeList);
+
+		double startTime;
+
+		printf("2-approximation algorithm :\n");
+		startTime = time(NULL);
+		vector<int> twoApproxTour = twoApproxAlgorithm(adjList);
+		printf("Running time   : %.3lf ms\n",time(NULL) - startTime);
+		printf("Distance of tour produced : %.3lf\n",computeTourDistance(twoApproxTour,nodeList));
+		puts("");
+
+		printf("2-OPT algorithm :\n");
+		startTime = time(NULL);
+		vector<int> twoOptTour = twoOptAlgorithm(nodeList,10);
+		printf("Running time   : %.3lf ms\n",time(NULL) - startTime);
+		printf("Distance of tour produced : %.3lf\n",computeTourDistance(twoOptTour,nodeList));
+		puts("");
+
+		printf("Nearest neighbour heuristic:\n");
+		startTime = time(NULL);
+		vector<int> nearestNeighbourTour = nearestNeighbourHeuristic(adjList);
+		printf("Running time   : %.3lf ms\n",time(NULL) - startTime);
+		printf("Distance of tour produced : %.3lf\n",computeTourDistance(nearestNeighbourTour,nodeList));
+		puts("");
+
+
+		printf("\n");
+	}
+
 }
 
 //-----------------------------------------
