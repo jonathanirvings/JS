@@ -1,4 +1,11 @@
-#include <bits/stdc++.h>
+#include <cstdio>
+#include <iostream>
+#include <stdlib.h>
+#include <vector>
+#include <algorithm>
+#include <math.h>
+#include <queue>
+#include <stack>
 using namespace std;
 
 typedef pair<int, double> id;
@@ -135,6 +142,59 @@ vi nearestNeighbourHeuristic(graph adjList){
 	return tour;
 }
 
+graph findMST(graph adjList) {
+	graph MST;
+	priority_queue<pair<double,pair<int,int> > > pq;
+	vector<bool> visited;
+
+	MST.resize(adjList.size());
+	visited.assign(adjList.size(),false);
+	pq.push(make_pair(0,make_pair(0,-1)));
+
+	while (!pq.empty()) {
+		double dist = pq.top().first;
+		int vertex_now = pq.top().second.first;
+		int vertex_prev = pq.top().second.second;
+		pq.pop();
+		if (visited[vertex_now]) continue;
+		visited[vertex_now] = true;
+		if (vertex_prev != -1) {
+			MST[vertex_now].push_back(make_pair(vertex_prev,dist));
+			MST[vertex_prev].push_back(make_pair(vertex_now,dist));
+		}
+		for (int i = 0; i < adjList[vertex_now].size(); ++i) {
+			double dist = adjList[vertex_now][i].second;
+			int vertex_next = adjList[vertex_now][i].first;
+			pq.push(make_pair(dist,make_pair(vertex_next,vertex_now)));
+		}
+	}
+	return MST;
+}
+
+vi twoApproxAlgorithm(graph adjList){
+	vector<bool> visited;
+	vector<int> tour;
+	stack<int> DFS; //let's do DFS without recursion, shall we
+
+	visited.assign(adjList.size(),false);
+	graph MST = findMST(adjList);
+	DFS.push(0);
+
+	while (!DFS.empty()) {
+		int vertex_now = DFS.top();
+		DFS.pop();
+		if (visited[vertex_now]) continue;
+		visited[vertex_now] = true;
+		tour.push_back(vertex_now);
+		for (int i = 0; i < MST[vertex_now].size(); ++i) {
+			int vertex_next = MST[vertex_now][i].first;
+			DFS.push(vertex_next);
+		}
+	}
+
+	return tour;
+}
+
 int main()
 {
 	freopen("output.txt", "w", stdout);
@@ -142,6 +202,7 @@ int main()
 	//randomGraph(10,2,1);
 	print_vector(twoOptAlgorithm(randomGraphNodeList(10, 100, 1),1));
 	print_vector(nearestNeighbourHeuristic(randomGraph(10, 2, 1)));
+	print_vector(twoApproxAlgorithm(randomGraph(10, 2, 1)));
 }
 
 //-----------------------------------------
