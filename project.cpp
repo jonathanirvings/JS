@@ -99,30 +99,41 @@ vi twoOptAlgorithm(vector<point> nodeList, int runTime){
 	double bestDistance = computeTourDistance(tour, nodeList);
 	while(time(NULL) - startTime < runTime){
 		//printf("here\n");
+		int beststart = -1;
+		int bestend = -1;
 		vi currentTour = mutateTour(tour);
-		for(int i = 0; i < V; i++){
+		double currentDistance = computeTourDistance(currentTour, nodeList);
+
+		for(int i = 1; i < V; i++){
   			for(int j = i+1; j < V; j++){
-  				vi new_tour;
-  				for(int k = 0; k < i; k++){
-  					new_tour.push_back(currentTour[k]);
-  				}
-  				for(int k = i; k <= j; k++){
-  					new_tour.push_back(currentTour[j-(k-i)]);
-  				}
-  				for(int k = j+1; k < V; k++){
-  					new_tour.push_back(currentTour[k]);
-  				}
   			//	print_vector(currentTour);
   			//	print_vector(new_tour);
-  				double newDist = computeTourDistance(new_tour, nodeList);
+  				double newDist = currentDistance - greatCircleDistance(nodeList[currentTour[i-1]], nodeList[currentTour[i]])
+  				 - greatCircleDistance(nodeList[currentTour[j]], nodeList[currentTour[j+1==V?0:j]]) 
+  				 + greatCircleDistance(nodeList[currentTour[i-1]], nodeList[currentTour[j]]) 
+  				 + greatCircleDistance(nodeList[currentTour[i]], nodeList[currentTour[j+1==V?0:j]]) ;
 			//	printf("%d\n", newDist);
   			//	printf("%lf\n", newDist);
   				if(newDist < bestDistance){
-  					tour = new_tour;
+  					beststart = i;
+  					bestend = j;
   					bestDistance = newDist;
            			//print_vector(tour);
   				}
   			}
+  		}
+  		if(beststart != -1){
+  			vi new_tour;
+			for(int k = 0; k < beststart; k++){
+				new_tour.push_back(currentTour[k]);
+			}
+			for(int k = beststart; k <= bestend; k++){
+				new_tour.push_back(currentTour[bestend-(k-beststart)]);
+			}
+			for(int k = bestend+1; k < V; k++){
+				new_tour.push_back(currentTour[k]);
+			}
+			tour = new_tour;
   		}
 	}
 	return tour;
@@ -278,7 +289,7 @@ int main()
 
 		printf("2-OPT algorithm :\n");
 		startTime = time(NULL);
-		vector<int> twoOptTour = twoOptAlgorithm(nodeList,10);
+		vector<int> twoOptTour = twoOptAlgorithm(nodeList,1000);
 		printf("Running time   : %.3lf ms\n",time(NULL) - startTime);
 		printf("Distance of tour produced : %.3lf\n",computeTourDistance(twoOptTour,nodeList));
 		puts("");
