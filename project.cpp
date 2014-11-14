@@ -191,7 +191,7 @@ graph findMST(graph adjList) {
 		for (int i = 0; i < adjList[vertex_now].size(); ++i) {
 			double dist = adjList[vertex_now][i].second;
 			int vertex_next = adjList[vertex_now][i].first;
-			pq.push(make_pair(dist,make_pair(vertex_next,vertex_now)));
+			pq.push(make_pair(-dist,make_pair(vertex_next,vertex_now)));
 		}
 	}
 	return MST;
