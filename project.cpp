@@ -6,6 +6,7 @@
 #include <math.h>
 #include <queue>
 #include <stack>
+#include <assert.h>
 using namespace std;
 
 typedef pair<int, double> id;
@@ -342,8 +343,18 @@ double greatCircleDistance(point node1, point node2){
                        sin(pLat)*sin(qLat));
 }
 
+bool isValidTour(vector<int> tour)
+{
+	sort(tour.begin(),tour.end());
+	for (int i = 0; i < tour.size(); ++i)
+		if (tour[i] != i) return false;
+	return true;
+}
+
 double computeTourDistance(vi tour, vector<point> nodeList){
 	double result = 0.0;
+	assert(tour.size() == nodeList.size());
+	assert(isValidTour(tour));
 	int V = (int)nodeList.size();
 	for(int i = 0; i < V-1; i++){
 		result += greatCircleDistance(nodeList[tour[i]], nodeList[tour[i+1]]);
