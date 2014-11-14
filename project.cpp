@@ -7,6 +7,7 @@
 #include <queue>
 #include <stack>
 #include <assert.h>
+#include <sys/timeb.h>
 using namespace std;
 
 typedef pair<int, double> id;
@@ -94,15 +95,14 @@ vi twoOptAlgorithm(vector<point> nodeList, int runTime){
 	
 	// Start with a tour from 0 to V-1
 	vi tour;
-	for(int i = 0; i < V; i++){
-		tour.push_back(i);
-	}
+	for(int i = 0; i < V; i++) tour.push_back(i);
+
 	int printTime = 10;
 	double bestDistance = computeTourDistance(tour, nodeList);
 	while(time(NULL) - startTime < runTime){
 		//printf("here\n");
 		if(time(NULL) - startTime > printTime){
-			printf("Time: %d, Tour Distance: %lf\n", time(NULL) - startTime, bestDistance);
+			//printf("Time: %d, Tour Distance: %lf\n", time(NULL) - startTime, bestDistance);
 			printTime += 10;
 		}
 		int beststart = -1;
@@ -145,8 +145,9 @@ vi twoOptAlgorithm(vector<point> nodeList, int runTime){
 	return tour;
 }
 
-vi nearestNeighbourHeuristic(graph adjList){
-	int V = (int)adjList.size();
+vi nearestNeighbourHeuristic(vector<point> nodeList){
+	int V = (int)nodeList.size();
+
 	vi tour;
 	vi selected;
 	selected.assign(V, 0);
@@ -158,9 +159,9 @@ vi nearestNeighbourHeuristic(graph adjList){
 		double best = 9999999999999999;
 		int bestIndex = 0;
 		//print_vector(selected);
-		for(int j = 0; j < adjList[prev].size(); j++){
-			int node = adjList[prev][j].first;
-			double currentWeight = adjList[prev][j].second;
+		for(int j = 0; j < V; j++){
+			int node = j;
+			double currentWeight = greatCircleDistance(nodeList[prev], nodeList[j]); 
 			//printf("%d %lf\n", node, currentWeight);
 			if(selected[node] == 0 && currentWeight < best){
 				best = currentWeight;
@@ -170,6 +171,7 @@ vi nearestNeighbourHeuristic(graph adjList){
 		selected[bestIndex] = 1;
 		tour.push_back(bestIndex);
 	}
+
 	return tour;
 }
 
@@ -193,6 +195,7 @@ graph findMST(graph adjList) {
 			MST[vertex_now].push_back(make_pair(vertex_prev,dist));
 			MST[vertex_prev].push_back(make_pair(vertex_now,dist));
 		}
+
 		for (int i = 0; i < adjList[vertex_now].size(); ++i) {
 			double dist = adjList[vertex_now][i].second;
 			int vertex_next = adjList[vertex_now][i].first;
@@ -206,10 +209,10 @@ vi twoApproxAlgorithm(graph adjList){
 	vector<bool> visited;
 	vector<int> tour;
 	stack<int> DFS; //let's do DFS without recursion, shall we
-
 	visited.assign(adjList.size(),false);
 	graph MST = findMST(adjList);
 	DFS.push(0);
+
 
 	while (!DFS.empty()) {
 		int vertex_now = DFS.top();
@@ -377,7 +380,7 @@ void experiment1(){
 
 		printf("Nearest neighbour heuristic:\n");
 		startTime = time(NULL);
-		vector<int> nearestNeighbourTour = nearestNeighbourHeuristic(adjList);
+		vector<int> nearestNeighbourTour = nearestNeighbourHeuristic(nodeList);
 		print_vector(nearestNeighbourTour);
 		printf("Running time   : %.3lf s\n",time(NULL) - startTime);
 		printf("Distance of tour produced : %.3lf\n",computeTourDistance(nearestNeighbourTour,nodeList));
@@ -428,21 +431,86 @@ void experiment2(){
 	}
 }
 
+int getMilliCount(){
+	timeb tb;
+	ftime(&tb);
+	int nCount = tb.millitm + (tb.time & 0xfffff) * 1000;
+	return nCount;
+}
+
+int getMilliSpan(int nTimeStart){
+	int nSpan = getMilliCount() - nTimeStart;
+	if(nSpan < 0)
+		nSpan += 0x100000 * 1000;
+	return nSpan;
+}
+
+
 void experiment3()
 {
-	string files[] = {"data_random/random1.txt",
-					  "data_random/random2.txt",
-					  "data_random/random3.txt",
-					  "data_random/random4.txt",
-					  "data_random/random5.txt",
-					  "data_reduced/911.txt",
-					  "data_reduced/nypd.txt"};
+	string files[] = {"data_small_random/random1.txt",
+					"data_small_random/random2.txt",
+					"data_small_random/random3.txt",
+					"data_small_random/random4.txt",
+					"data_small_random/random5.txt",
+					"data_small_random/random6.txt",
+					"data_small_random/random7.txt",
+					"data_small_random/random8.txt",
+					"data_small_random/random9.txt",
+					"data_small_random/random10.txt",
+					"data_mid_random/random1.txt",
+					"data_mid_random/random2.txt",
+					"data_mid_random/random3.txt",
+					"data_mid_random/random4.txt",
+					"data_mid_random/random5.txt",
+					"data_mid_random/random6.txt",
+					"data_mid_random/random7.txt",
+					"data_mid_random/random8.txt",
+					"data_mid_random/random9.txt",
+					"data_mid_random/random10.txt",
+					"data_big_random/random1.txt",
+					"data_big_random/random2.txt",
+					"data_big_random/random3.txt",
+					"data_big_random/random4.txt",
+					"data_big_random/random5.txt",
+					"data_big_random/random6.txt",
+					"data_big_random/random7.txt",
+					"data_big_random/random8.txt",
+					"data_big_random/random9.txt",
+					"data_big_random/random10.txt",
+					"data_reduced/911.txt",
+					"data_reduced/nypd.txt"};
 
-	string testname[] = {"Random Graph 1",
-						 "Random Graph 2",
-						 "Random Graph 3",
-						 "Random Graph 4",
-						 "Random Graph 5",
+	string testname[] = {"Random Small Graph 1",
+						 "Random Small Graph 2",
+						 "Random Small Graph 3",
+						 "Random Small Graph 4",
+						 "Random Small Graph 5",
+						 "Random Small Graph 6",
+						 "Random Small Graph 7",
+						 "Random Small Graph 8",
+						 "Random Small Graph 9",
+						 "Random Small Graph 10",
+						 "Random Medium Graph 1",
+						 "Random Medium Graph 2",
+						 "Random Medium Graph 3",
+						 "Random Medium Graph 4",
+						 "Random Medium Graph 5",
+						 "Random Medium Graph 6",
+						 "Random Medium Graph 7",
+						 "Random Medium Graph 8",
+						 "Random Medium Graph 9",
+						 "Random Medium Graph 10",
+						 "Random Large Graph 1",
+						 "Random Large Graph 2",
+						 "Random Large Graph 3",
+						 "Random Large Graph 4",
+						 "Random Large Graph 5",
+						 "Random Large Graph 6",
+						 "Random Large Graph 7",
+						 "Random Large Graph 8",
+						 "Random Large Graph 9",
+						 "Random Large Graph 10",
 						 "Real Graph 1",
 						 "Real Graph 2" };
 
@@ -451,35 +519,39 @@ void experiment3()
 	//test(files[5]);
 	//return 0;
 
-	for (int i = 0; i < 7; ++i)
+	for (int i = 0; i < 20; ++i)
 	{
 		printf("ON DATASET %d: %s\n",i,testname[i].c_str());
 		fflush(stdout);
 		vector<point> nodeList = inputGraphFromFile(files[i]);
 		graph adjList = nodeListToAdjList(nodeList);
 
-		double startTime;
+		clock_t startTime;
+
+		printf("Nearest neighbour heuristic:\n");
+		startTime = clock();
+		vector<int> nearestNeighbourTour = nearestNeighbourHeuristic(nodeList);
+		printf("Running time   : %.3lf s\n",1000.0 * (clock() - startTime) / CLOCKS_PER_SEC);
+		printf("Distance of tour produced : %.3lf\n",computeTourDistance(nearestNeighbourTour,nodeList));
+		puts("");
 
 		printf("2-approximation algorithm :\n");
-		startTime = time(NULL);
+		startTime = clock();
 		vector<int> twoApproxTour = twoApproxAlgorithm(adjList);
-		printf("Running time   : %.3lf s\n",time(NULL) - startTime);
+		printf("Running time   : %.3lf s\n",1000.0 * (clock() - startTime) / CLOCKS_PER_SEC);
 		printf("Distance of tour produced : %.3lf\n",computeTourDistance(twoApproxTour,nodeList));
 		puts("");
 
 		printf("2-OPT algorithm :\n");
-		startTime = time(NULL);
-		vector<int> twoOptTour = twoOptAlgorithm(nodeList,30);
-		printf("Running time   : %.3lf ms\n",time(NULL) - startTime);
+		startTime = clock();
+		int t = 10;
+		if(i >= 10) t = 180;
+		vector<int> twoOptTour = twoOptAlgorithm(nodeList,t);
+		printf("Running time   : %.3lf ms\n",1000.0 * (clock() - startTime) / CLOCKS_PER_SEC);
 		printf("Distance of tour produced : %.3lf\n",computeTourDistance(twoOptTour,nodeList));
 		puts("");
 
-		printf("Nearest neighbour heuristic:\n");
-		startTime = time(NULL);
-		vector<int> nearestNeighbourTour = nearestNeighbourHeuristic(adjList);
-		printf("Running time   : %.3lf s\n",time(NULL) - startTime);
-		printf("Distance of tour produced : %.3lf\n",computeTourDistance(nearestNeighbourTour,nodeList));
-		puts("");
+		
 
 
 		printf("\n");
@@ -488,7 +560,7 @@ void experiment3()
 }
 
 int main(){
-	experiment2();
+	experiment3();
 }
 
 //-----------------------------------------

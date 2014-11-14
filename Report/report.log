@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2011.7.3)  14 NOV 2014 18:03
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2011.7.3)  14 NOV 2014 21:24
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -876,53 +876,54 @@ LaTeX Font Info:    Try loading font information for TS1+futs on input line 291
  (/usr/local/texlive/2011/texmf-dist/tex/latex/fourier/ts1futs.fd
 File: ts1futs.fd 2004/03/26 Fontinst v1.926 font definitions for TS1/futs.
 )
-[8] <fig1.png, id=128, 926.46124pt x 711.65875pt>
+LaTeX Font Info:    Try loading font information for T1+cmtt on input line 294.
+
+
+(/usr/local/texlive/2011/texmf-dist/tex/latex/base/t1cmtt.fd
+File: t1cmtt.fd 1999/05/25 v2.5h Standard LaTeX font definitions
+) [8]
+<fig1.png, id=156, 926.46124pt x 711.65875pt>
 File: fig1.png Graphic file (type png)
  <use fig1.png>
 Package pdftex.def Info: fig1.png used on input line 369.
 (pdftex.def)             Requested size: 277.9405pt x 213.49927pt.
  [9]
-<fig2.png, id=135, 924.45375pt x 710.655pt>
+<fig2.png, id=163, 924.45375pt x 710.655pt>
 File: fig2.png Graphic file (type png)
  <use fig2.png>
 Package pdftex.def Info: fig2.png used on input line 370.
 (pdftex.def)             Requested size: 277.33826pt x 213.19814pt.
 
-<fig3.png, id=136, 995.72pt x 696.6025pt>
+<fig3.png, id=164, 995.72pt x 696.6025pt>
 File: fig3.png Graphic file (type png)
  <use fig3.png>
 Package pdftex.def Info: fig3.png used on input line 371.
 (pdftex.def)             Requested size: 298.7183pt x 208.98236pt.
- [10 <./fig1.png> <./fig2.png> <./fig3.png>] (./report.bbl
-LaTeX Font Info:    Try loading font information for T1+cmtt on input line 25.
-
-(/usr/local/texlive/2011/texmf-dist/tex/latex/base/t1cmtt.fd
-File: t1cmtt.fd 1999/05/25 v2.5h Standard LaTeX font definitions
-)
+ [10 <./fig1.png> <./fig2.png> <./fig3.png>] [11] [12] (./report.bbl [13]
 Underfull \hbox (badness 1005) in paragraph at lines 46--50
 \T1/futs/m/n/10.95 (+20) trieved from []$\T1/cmtt/m/n/10.95 http : / / www . cs
  . princeton . edu / courses / archive / spr07 / cos226 / lectures /
  []
 
 )
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 388.
- [11]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 388.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 604.
+ [14]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 604.
  (./report.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 388.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 388.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 604.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 604.
 Package rerunfilecheck Info: File `report.out' has not changed.
-(rerunfilecheck)             Checksum: E3ABDDCB6342431B5EF142E5189BF508;727.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 388.
+(rerunfilecheck)             Checksum: 92AE359D06B7C6D2D7E3633FCFDE2A77;1088.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 604.
  ) 
 Here is how much of TeX's memory you used:
- 12027 strings out of 493633
- 182384 string characters out of 3143378
- 313984 words of memory out of 3000000
- 14762 multiletter control sequences out of 15000+200000
- 149913 words of font info for 332 fonts, out of 3000000 for 9000
+ 12041 strings out of 493633
+ 182606 string characters out of 3143378
+ 319988 words of memory out of 3000000
+ 14769 multiletter control sequences out of 15000+200000
+ 149830 words of font info for 330 fonts, out of 3000000 for 9000
  831 hyphenation exceptions out of 8191
- 36i,13n,47p,1270b,436s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 36i,13n,47p,1270b,480s stack positions out of 5000i,500n,10000p,200000b,50000s
 {/usr/local/texlive/2011/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}
 {/usr/local/texlive/2011/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/tex
 live/2011/texmf-dist/fonts/type1/public/fourier/fourier-mex.pfb></usr/local/tex
@@ -932,11 +933,12 @@ live/2011/texmf-dist/fonts/type1/public/fourier/fourier-ms.pfb></usr/local/texl
 ive/2011/texmf-dist/fonts/type1/adobe/utopia/putb8a.pfb></usr/local/texlive/201
 1/texmf-dist/fonts/type1/adobe/utopia/putr8a.pfb></usr/local/texlive/2011/texmf
 -dist/fonts/type1/adobe/utopia/putri8a.pfb></usr/local/texlive/2011/texmf-dist/
-fonts/type1/public/cm-super/sftt1095.pfb>
-Output written on report.pdf (11 pages, 237177 bytes).
+fonts/type1/public/cm-super/sftt0900.pfb></usr/local/texlive/2011/texmf-dist/fo
+nts/type1/public/cm-super/sftt1095.pfb>
+Output written on report.pdf (14 pages, 278092 bytes).
 PDF statistics:
- 204 PDF objects out of 1000 (max. 8388607)
- 175 compressed objects within 2 object streams
- 52 named destinations out of 1000 (max. 500000)
- 56432 words of extra memory for PDF output out of 61914 (max. 10000000)
+ 250 PDF objects out of 1000 (max. 8388607)
+ 216 compressed objects within 3 object streams
+ 62 named destinations out of 1000 (max. 500000)
+ 56984 words of extra memory for PDF output out of 61914 (max. 10000000)
 
