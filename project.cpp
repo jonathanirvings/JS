@@ -79,9 +79,10 @@ graph nodeListToAdjList(vector<point> nodeList)
 	adjList.resize(nodeList.size());
 	for (int i = 0; i < nodeList.size(); ++i)
 	{
-		for (int j = i + 1; j < nodeList.size(); ++j)
+		for (int j = 0; j < nodeList.size(); ++j)
 		{
-			adjList[i].push_back(make_pair(j,greatCircleDistance(nodeList[i],nodeList[j])));
+			if (i != j)
+				adjList[i].push_back(make_pair(j,greatCircleDistance(nodeList[i],nodeList[j])));
 		}
 	}
 	return adjList;
@@ -150,7 +151,7 @@ vi nearestNeighbourHeuristic(graph adjList){
 	for(int i = 1; i < V; i++){
 		int prev = tour[i-1];
 		//printf("%d\n", prev);
-		double best = 999999999;
+		double best = 9999999999999999;
 		int bestIndex = 0;
 		//print_vector(selected);
 		for(int j = 0; j < adjList[prev].size(); j++){
