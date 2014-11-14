@@ -220,6 +220,7 @@ vi twoApproxAlgorithm(graph adjList){
 	return tour;
 }
 
+
 void outputGraphToFile(string fileName, vector<point> nodeList) 
 {
 	freopen(fileName.c_str(), "w", stdout);	
@@ -271,7 +272,7 @@ int main()
 {
 	//freopen("output.txt", "w", stdout);
 	srand (time(NULL)); // Randomize seed
-	for (int i = 0; i < 7; ++i)
+	for (int i = 0; i < files.size(); ++i)
 	{
 		printf("ON DATASET %d: %s\n",i,testname[i].c_str());
 		fflush(stdout);
@@ -289,7 +290,7 @@ int main()
 
 		printf("2-OPT algorithm :\n");
 		startTime = time(NULL);
-		vector<int> twoOptTour = twoOptAlgorithm(nodeList,1000);
+		vector<int> twoOptTour = twoOptAlgorithm(nodeList,30);
 		printf("Running time   : %.3lf ms\n",time(NULL) - startTime);
 		printf("Distance of tour produced : %.3lf\n",computeTourDistance(twoOptTour,nodeList));
 		puts("");
@@ -317,6 +318,7 @@ double dist(point node1, point node2)
 }
 
 double greatCircleDistance(point node1, point node2){
+	if(node1.first == node2.first && node1.second == node2.second) return 0.0;
 	double pLat = node1.first;
 	double pLong = node1.second;
 	double qLat = node2.first;
