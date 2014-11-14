@@ -97,10 +97,14 @@ vi twoOptAlgorithm(vector<point> nodeList, int runTime){
 	for(int i = 0; i < V; i++){
 		tour.push_back(i);
 	}
-
+	int printTime = 10;
 	double bestDistance = computeTourDistance(tour, nodeList);
 	while(time(NULL) - startTime < runTime){
 		//printf("here\n");
+		if(time(NULL) - startTime > printTime){
+			printf("Time: %d, Tour Distance: %lf\n", time(NULL) - startTime, bestDistance);
+			printTime += 10;
+		}
 		int beststart = -1;
 		int bestend = -1;
 		vi currentTour = mutateTour(tour);
@@ -371,21 +375,31 @@ void experiment1(){
 		printf("Distance of tour produced : %.3lf\n",computeTourDistance(twoApproxTour,nodeList));
 		puts("");
 
+		printf("Nearest neighbour heuristic:\n");
+		startTime = time(NULL);
+		vector<int> nearestNeighbourTour = nearestNeighbourHeuristic(adjList);
+		print_vector(nearestNeighbourTour);
+		printf("Running time   : %.3lf s\n",time(NULL) - startTime);
+		printf("Distance of tour produced : %.3lf\n",computeTourDistance(nearestNeighbourTour,nodeList));
+		puts("");
+
 		printf("Held-Karp algorithm :\n");
 		startTime = time(NULL);
 		printf("Running time   : %.3lf ms\n",time(NULL) - startTime);
 		printf("Distance of tour produced : %.3lf\n",optimalTour(nodeList));
 		puts("");
 
+		printf("Ratio of 2-approx to optimal: %.3lf\n", computeTourDistance(twoApproxTour,nodeList)/optimalTour(nodeList));
+		printf("Ratio of Nearest neighbour to optimal: %.3lf\n", computeTourDistance(nearestNeighbourTour,nodeList)/optimalTour(nodeList));
 
 		printf("\n");
 	}
 }
 
 void experiment2(){
-	string files[] = {"data_mid_random/random1.txt",
+	string files[] = {"data_big_random/random1.txt",
 					"data_mid_random/random2.txt",
-					"data_mid_random/random3.txt"};
+					"data_small_random/random3.txt"};
 
 	string testname[] = {"Random Graph 1",
 						 "Random Graph 2",
@@ -393,22 +407,22 @@ void experiment2(){
 	srand (time(NULL)); 
 	for (int i = 0; i < 3; ++i)
 	{
-		for(int j = 10; j <= 120; j += 10){
 
-			printf("ON DATASET %d: %s\n",i,testname[i].c_str());
-			fflush(stdout);
-			vector<point> nodeList = inputGraphFromFile(files[i]);
-			graph adjList = nodeListToAdjList(nodeList);
 
-			double startTime;
+		printf("ON DATASET %d: %s\n",i,testname[i].c_str());
+		fflush(stdout);
+		vector<point> nodeList = inputGraphFromFile(files[i]);
+		graph adjList = nodeListToAdjList(nodeList);
 
-			printf("2-OPT algorithm %d seconds:\n", j);
-			startTime = time(NULL);
-			vector<int> twoOptTour = twoOptAlgorithm(nodeList,j);
-			printf("Running time   : %.3lf ms\n",time(NULL) - startTime);
-			printf("Distance of tour produced : %.3lf\n",computeTourDistance(twoOptTour,nodeList));
-			puts("");
-		}
+		double startTime;
+
+		printf("2-OPT algorithm %d seconds:\n", 500);
+		startTime = time(NULL);
+		vector<int> twoOptTour = twoOptAlgorithm(nodeList,500);
+		printf("Running time   : %.3lf ms\n",time(NULL) - startTime);
+		printf("Distance of tour produced : %.3lf\n",computeTourDistance(twoOptTour,nodeList));
+		puts("");
+		
 
 		printf("\n");
 	}
@@ -517,7 +531,7 @@ double computeTourDistance(vi tour, vector<point> nodeList){
 		result += greatCircleDistance(nodeList[tour[i]], nodeList[tour[i+1]]);
 		//printf("(%.3lf,%.3lf)(%.3lf,%.3lf)%.3lf\n",nodeList[tour[i]].first,nodeList[tour[i]].second,nodeList[tour[i+1]].first,nodeList[tour[i+1]].second,result);
 	}
-	result += greatCircleDistance(nodeList[V-1], nodeList[0]);
+	result += greatCircleDistance(nodeList[tour[V-1]], nodeList[tour[0]]);
 	//printf("%lf\n", result);
 	return result;
 }

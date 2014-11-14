@@ -60,5 +60,14 @@ note = {Retrieved from \url{http://pub.ist.ac.at/~vnk/papers/blossom5.pdf}}
  acmid = {2308172},
  publisher = {Elsevier Science Publishers B. V.},
  address = {Amsterdam, The Netherlands, The Netherlands},
- keywords = {Global optimization, Graph bisection, Heuristic search, Multi-start, Stochastic hill-climbing, Traveling salesman problem},
-} 
+ keywords = {Global optimization, Graph bisection, Heuristic search, Multi-start, Stochastic hill-climbing, Traveling salesman problem}
+};
+
+@Book{ravi,
+ author = {Ravi, S. S.},
+ title = {Fundamental problems in computing essays in honor of Professor Daniel J. Rosenkrantz},
+ publisher = {Springer},
+ year = {2009},
+ address = {Dordrecht},
+ isbn = {978-1-4020-9687-7}
+}
