@@ -220,6 +220,36 @@ vi twoApproxAlgorithm(graph adjList){
 	return tour;
 }
 
+double memo[18][1 << 18];
+
+double heldKarpTSP(int pos, int mask, vector<point> nodeList){
+	//printf("%d %d\n", pos, mask);
+	int N = nodeList.size();
+	if(mask == (1 << N)-1) {
+		//printf("here\n");
+		return greatCircleDistance(nodeList[0], nodeList[pos]);
+	}
+	else if(memo[pos][mask] >= 0.0) return memo[pos][mask];
+
+	double ans = 100000000000.0;
+	for(int i = 0; i < N; i++){
+		if((mask & (1 << i)) == 0 && i != pos) {
+			//printf("%lf\n", greatCircleDistance(nodeList[pos], nodeList[i]) + heldKarpTSP(i, mask + (1 << i), nodeList));
+			ans = min(ans, greatCircleDistance(nodeList[pos], nodeList[i]) + heldKarpTSP(i, mask | (1 << i), nodeList));
+		}
+	}
+	return memo[pos][mask] = ans;
+}
+
+double optimalTour(vector<point> nodeList){
+	int N = nodeList.size();
+	for(int i = 0; i < N; i++){
+		for(int j = 0; j < (1 << N); j++){
+			memo[i][j] = -1.0;
+		}
+	}
+	return heldKarpTSP(0, 1, nodeList);
+}
 
 void outputGraphToFile(string fileName, vector<point> nodeList) 
 {
@@ -250,23 +280,47 @@ void generateRandomGraphs(void)
 	outputGraphToFile("data_random/random5.txt",randomGraphNodeList(1000,1000,1));
 }
 
+void generateSmallRandomGraphs(void)
+{
+	outputGraphToFile("data_small_random/random1.txt",randomGraphNodeList(15,10,1));
+	outputGraphToFile("data_small_random/random2.txt",randomGraphNodeList(15,10,1));
+	outputGraphToFile("data_small_random/random3.txt",randomGraphNodeList(15,10,1));
+	outputGraphToFile("data_small_random/random4.txt",randomGraphNodeList(15,10,1));
+	outputGraphToFile("data_small_random/random5.txt",randomGraphNodeList(15,10,1));
+	outputGraphToFile("data_small_random/random6.txt",randomGraphNodeList(15,10,1));
+	outputGraphToFile("data_small_random/random7.txt",randomGraphNodeList(15,10,1));
+	outputGraphToFile("data_small_random/random8.txt",randomGraphNodeList(15,10,1));
+	outputGraphToFile("data_small_random/random9.txt",randomGraphNodeList(15,10,1));
+	outputGraphToFile("data_small_random/random10.txt",randomGraphNodeList(15,10,1));
+}
 
+void generateMidRandomGraphs(void)
+{
+	outputGraphToFile("data_mid_random/random1.txt",randomGraphNodeList(1000,10,1));
+	outputGraphToFile("data_mid_random/random2.txt",randomGraphNodeList(1000,10,1));
+	outputGraphToFile("data_mid_random/random3.txt",randomGraphNodeList(1000,10,1));
+	outputGraphToFile("data_mid_random/random4.txt",randomGraphNodeList(1000,10,1));
+	outputGraphToFile("data_mid_random/random5.txt",randomGraphNodeList(1000,10,1));
+	outputGraphToFile("data_mid_random/random6.txt",randomGraphNodeList(1000,10,1));
+	outputGraphToFile("data_mid_random/random7.txt",randomGraphNodeList(1000,10,1));
+	outputGraphToFile("data_mid_random/random8.txt",randomGraphNodeList(1000,10,1));
+	outputGraphToFile("data_mid_random/random9.txt",randomGraphNodeList(1000,10,1));
+	outputGraphToFile("data_mid_random/random10.txt",randomGraphNodeList(1000,10,1));
+}
 
-string files[] = {"data_random/random1.txt",
-				  "data_random/random2.txt",
-				  "data_random/random3.txt",
-				  "data_random/random4.txt",
-				  "data_random/random5.txt",
-				  "data_reduced/911.txt",
-				  "data_reduced/nypd.txt"};
-
-string testname[] = {"Random Graph 1",
-					 "Random Graph 2",
-					 "Random Graph 3",
-					 "Random Graph 4",
-					 "Random Graph 5",
-					 "Real Graph 1",
-					 "Real Graph 2" };
+void generateBigRandomGraphs(void)
+{
+	outputGraphToFile("data_big_random/random1.txt",randomGraphNodeList(10000,10,1));
+	outputGraphToFile("data_big_random/random2.txt",randomGraphNodeList(10000,10,1));
+	outputGraphToFile("data_big_random/random3.txt",randomGraphNodeList(10000,10,1));
+	outputGraphToFile("data_big_random/random4.txt",randomGraphNodeList(10000,10,1));
+	outputGraphToFile("data_big_random/random5.txt",randomGraphNodeList(10000,10,1));
+	outputGraphToFile("data_big_random/random6.txt",randomGraphNodeList(10000,10,1));
+	outputGraphToFile("data_big_random/random7.txt",randomGraphNodeList(10000,10,1));
+	outputGraphToFile("data_big_random/random8.txt",randomGraphNodeList(10000,10,1));
+	outputGraphToFile("data_big_random/random9.txt",randomGraphNodeList(10000,10,1));
+	outputGraphToFile("data_big_random/random10.txt",randomGraphNodeList(10000,10,1));
+}
 
 void test(string inputFile)
 {
@@ -276,8 +330,106 @@ void test(string inputFile)
 	printf("%.3lf\n",computeTourDistance(tour,nodeList));
 }
 
-int main()
+void experiment1(){
+	string files[] = {"data_small_random/random1.txt",
+					"data_small_random/random2.txt",
+					"data_small_random/random3.txt",
+					"data_small_random/random4.txt",
+					"data_small_random/random5.txt",
+					"data_small_random/random6.txt",
+					"data_small_random/random7.txt",
+					"data_small_random/random8.txt",
+					"data_small_random/random9.txt",
+					"data_small_random/random10.txt"};
+
+	string testname[] = {"Random Graph 1",
+						 "Random Graph 2",
+						 "Random Graph 3",
+						 "Random Graph 4",
+						 "Random Graph 5",
+						 "Random Graph 6",
+						 "Random Graph 7",
+						 "Random Graph 8",
+						 "Random Graph 9",
+						 "Random Graph 10"};
+	srand (time(NULL)); 
+	for (int i = 0; i < 10; ++i)
+	{
+		printf("ON DATASET %d: %s\n",i,testname[i].c_str());
+		fflush(stdout);
+		vector<point> nodeList = inputGraphFromFile(files[i]);
+		graph adjList = nodeListToAdjList(nodeList);
+
+		double startTime;
+
+		printf("2-approximation algorithm :\n");
+		startTime = time(NULL);
+		vector<int> twoApproxTour = twoApproxAlgorithm(adjList);
+		printf("Running time   : %.3lf s\n",time(NULL) - startTime);
+		printf("Distance of tour produced : %.3lf\n",computeTourDistance(twoApproxTour,nodeList));
+		puts("");
+
+		printf("Held-Karp algorithm :\n");
+		startTime = time(NULL);
+		printf("Running time   : %.3lf ms\n",time(NULL) - startTime);
+		printf("Distance of tour produced : %.3lf\n",optimalTour(nodeList));
+		puts("");
+
+
+		printf("\n");
+	}
+}
+
+void experiment2(){
+	string files[] = {"data_mid_random/random1.txt",
+					"data_mid_random/random2.txt",
+					"data_mid_random/random3.txt"};
+
+	string testname[] = {"Random Graph 1",
+						 "Random Graph 2",
+						 "Random Graph 3"};
+	srand (time(NULL)); 
+	for (int i = 0; i < 3; ++i)
+	{
+		for(int j = 10; j <= 120; j += 10){
+
+			printf("ON DATASET %d: %s\n",i,testname[i].c_str());
+			fflush(stdout);
+			vector<point> nodeList = inputGraphFromFile(files[i]);
+			graph adjList = nodeListToAdjList(nodeList);
+
+			double startTime;
+
+			printf("2-OPT algorithm %d seconds:\n", j);
+			startTime = time(NULL);
+			vector<int> twoOptTour = twoOptAlgorithm(nodeList,j);
+			printf("Running time   : %.3lf ms\n",time(NULL) - startTime);
+			printf("Distance of tour produced : %.3lf\n",computeTourDistance(twoOptTour,nodeList));
+			puts("");
+		}
+
+		printf("\n");
+	}
+}
+
+void experiment3()
 {
+	string files[] = {"data_random/random1.txt",
+					  "data_random/random2.txt",
+					  "data_random/random3.txt",
+					  "data_random/random4.txt",
+					  "data_random/random5.txt",
+					  "data_reduced/911.txt",
+					  "data_reduced/nypd.txt"};
+
+	string testname[] = {"Random Graph 1",
+						 "Random Graph 2",
+						 "Random Graph 3",
+						 "Random Graph 4",
+						 "Random Graph 5",
+						 "Real Graph 1",
+						 "Real Graph 2" };
+
 	//freopen("output.txt", "w", stdout);
 	srand (time(NULL)); // Randomize seed
 	//test(files[5]);
@@ -317,6 +469,10 @@ int main()
 		printf("\n");
 	}
 
+}
+
+int main(){
+	experiment2();
 }
 
 //-----------------------------------------
