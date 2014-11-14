@@ -6,6 +6,7 @@
 #include <math.h>
 #include <queue>
 #include <stack>
+#include <assert.h>
 using namespace std;
 
 typedef pair<int, double> id;
@@ -78,9 +79,10 @@ graph nodeListToAdjList(vector<point> nodeList)
 	adjList.resize(nodeList.size());
 	for (int i = 0; i < nodeList.size(); ++i)
 	{
-		for (int j = i + 1; j < nodeList.size(); ++j)
+		for (int j = 0; j < nodeList.size(); ++j)
 		{
-			adjList[i].push_back(make_pair(j,greatCircleDistance(nodeList[i],nodeList[j])));
+			if (i != j)
+				adjList[i].push_back(make_pair(j,greatCircleDistance(nodeList[i],nodeList[j])));
 		}
 	}
 	return adjList;
@@ -149,7 +151,7 @@ vi nearestNeighbourHeuristic(graph adjList){
 	for(int i = 1; i < V; i++){
 		int prev = tour[i-1];
 		//printf("%d\n", prev);
-		double best = 999999999;
+		double best = 9999999999999999;
 		int bestIndex = 0;
 		//print_vector(selected);
 		for(int j = 0; j < adjList[prev].size(); j++){
@@ -190,7 +192,7 @@ graph findMST(graph adjList) {
 		for (int i = 0; i < adjList[vertex_now].size(); ++i) {
 			double dist = adjList[vertex_now][i].second;
 			int vertex_next = adjList[vertex_now][i].first;
-			pq.push(make_pair(dist,make_pair(vertex_next,vertex_now)));
+			pq.push(make_pair(-dist,make_pair(vertex_next,vertex_now)));
 		}
 	}
 	return MST;
@@ -498,8 +500,18 @@ double greatCircleDistance(point node1, point node2){
                        sin(pLat)*sin(qLat));
 }
 
+bool isValidTour(vector<int> tour)
+{
+	sort(tour.begin(),tour.end());
+	for (int i = 0; i < tour.size(); ++i)
+		if (tour[i] != i) return false;
+	return true;
+}
+
 double computeTourDistance(vi tour, vector<point> nodeList){
 	double result = 0.0;
+	assert(tour.size() == nodeList.size());
+	assert(isValidTour(tour));
 	int V = (int)nodeList.size();
 	for(int i = 0; i < V-1; i++){
 		result += greatCircleDistance(nodeList[tour[i]], nodeList[tour[i+1]]);
