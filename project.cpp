@@ -268,11 +268,22 @@ string testname[] = {"Random Graph 1",
 					 "Real Graph 1",
 					 "Real Graph 2" };
 
+void test(string inputFile)
+{
+	vector<point> nodeList = inputGraphFromFile(inputFile);
+	graph adjList = nodeListToAdjList(nodeList);
+	vector<int> tour = twoApproxAlgorithm(adjList);
+	printf("%.3lf\n",computeTourDistance(tour,nodeList));
+}
+
 int main()
 {
 	//freopen("output.txt", "w", stdout);
 	srand (time(NULL)); // Randomize seed
-	for (int i = 0; i < files.size(); ++i)
+	//test(files[5]);
+	//return 0;
+
+	for (int i = 0; i < 7; ++i)
 	{
 		printf("ON DATASET %d: %s\n",i,testname[i].c_str());
 		fflush(stdout);
@@ -284,7 +295,7 @@ int main()
 		printf("2-approximation algorithm :\n");
 		startTime = time(NULL);
 		vector<int> twoApproxTour = twoApproxAlgorithm(adjList);
-		printf("Running time   : %.3lf ms\n",time(NULL) - startTime);
+		printf("Running time   : %.3lf s\n",time(NULL) - startTime);
 		printf("Distance of tour produced : %.3lf\n",computeTourDistance(twoApproxTour,nodeList));
 		puts("");
 
@@ -298,7 +309,7 @@ int main()
 		printf("Nearest neighbour heuristic:\n");
 		startTime = time(NULL);
 		vector<int> nearestNeighbourTour = nearestNeighbourHeuristic(adjList);
-		printf("Running time   : %.3lf ms\n",time(NULL) - startTime);
+		printf("Running time   : %.3lf s\n",time(NULL) - startTime);
 		printf("Distance of tour produced : %.3lf\n",computeTourDistance(nearestNeighbourTour,nodeList));
 		puts("");
 
@@ -336,6 +347,7 @@ double computeTourDistance(vi tour, vector<point> nodeList){
 	int V = (int)nodeList.size();
 	for(int i = 0; i < V-1; i++){
 		result += greatCircleDistance(nodeList[tour[i]], nodeList[tour[i+1]]);
+		//printf("(%.3lf,%.3lf)(%.3lf,%.3lf)%.3lf\n",nodeList[tour[i]].first,nodeList[tour[i]].second,nodeList[tour[i+1]].first,nodeList[tour[i+1]].second,result);
 	}
 	result += greatCircleDistance(nodeList[V-1], nodeList[0]);
 	//printf("%lf\n", result);
